@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banh Duc Hieu — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e0e;
+    --bg2: #161616;
+    --bg3: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e8e8;
+    --muted: #888;
+    --hint: #555;
+    --accent: #1D9E75;
+    --accent-dim: rgba(29,158,117,0.12);
+    --accent-border: rgba(29,158,117,0.3);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14,14,14,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* LAYOUT */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-child { border-bottom: none; }
+
+  /* HERO */
+  #hero {
+    padding: 7rem 0 5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-name {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .hero-name strong {
+    font-weight: 500;
+  }
+  .hero-tagline {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #18866200; border: 1px solid var(--accent); color: var(--accent); }
+  .btn-outline {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+  }
+  .btn-outline:hover { border-color: var(--border2); color: var(--text); background: var(--bg3); }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ABOUT */
+  .about-text {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 640px;
+  }
+  .about-text em {
+    color: var(--text);
+    font-style: normal;
+  }
+
+  /* STACK */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .stack-cell {
+    background: var(--bg2);
+    padding: 1.5rem;
+  }
+  .stack-cell-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: var(--bg3);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+  .tag:hover {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .tag.primary {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-color: var(--accent-border);
+  }
+
+  /* BLOG */
+  .blog-list { display: flex; flex-direction: column; gap: 0; }
+  .blog-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .blog-item:first-child { border-top: 1px solid var(--border); }
+  .blog-item:hover .blog-title { color: var(--accent); }
+  .blog-item:hover .blog-arrow { opacity: 1; transform: translateX(3px); }
+  .blog-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .blog-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid var(--accent-border);
+  }
+  .blog-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--hint);
+  }
+  .blog-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.15s;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .blog-excerpt {
+    font-size: 13px;
+    color: var(--hint);
+    line-height: 1.6;
+  }
+  .blog-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    opacity: 0;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .blog-coming {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .blog-coming:hover .blog-title { color: var(--text); }
+  .blog-coming:hover .blog-arrow { opacity: 0; transform: none; }
+
+  /* CONNECT */
+  .connect-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .connect-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.03em;
+  }
+  .connect-link:hover {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .connect-icon { font-size: 14px; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--hint);
+    letter-spacing: 0.05em;
+    border-top: 1px solid var(--border);
+  }
+
+  /* CURSOR ACCENT LINE */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .stat {
+    flex: 1;
+    background: var(--bg2);
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--hint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .blog-item-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  @media (max-width: 600px) {
+    .stack-grid { grid-template-columns: 1fr; }
+    .stats-row { flex-direction: column; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1.2rem; }
+    .container { padding: 0 1.25rem; }
+    section { padding: 3.5rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">CNDvn<span class="cursor"></span></div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#stack">stack</a></li>
+    <li><a href="#blog">blog</a></li>
+    <li><a href="#connect">contact</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <section id="hero">
+    <div class="hero-label">Backend Engineer · Ho Chi Minh City</div>
+    <h1 class="hero-name">Banh<br><strong>Duc Hieu</strong></h1>
+    <div class="hero-tagline">// Code Never Die</div>
+    <p class="hero-desc">
+      I build backend systems that scale. Focused on system design,
+      clean architecture, and the TypeScript + Golang.
+      I write about what I ship, what breaks, and what I learn.
+    </p>
+    <div class="hero-cta">
+      <a href="#blog" class="btn btn-primary">Read the blog</a>
+      <a href="https://github.com/CNDvn" class="btn btn-outline" target="_blank">GitHub ↗</a>
+      <a href="https://linkedin.com/in/cndvn" class="btn btn-outline" target="_blank">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-label">About</div>
+    <p class="about-text">
+      Backend engineer with a strong interest in <em>distributed systems</em> and <em>scalable architecture</em>.
+      I've worked across TypeScript, Node.js, and Golang — building APIs, microservices, and
+      the plumbing that makes products run reliably under load.<br><br>
+      This space is where I share honest, practical writing on <em>system design</em>,
+      backend patterns, and engineering lessons — the kind of content I wish existed
+      when I was figuring things out.
+    </p>
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-num">36+</span>
+        <div class="stat-label">Public repos</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">499</span>
+        <div class="stat-label">Contributions</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">4+</span>
+        <div class="stat-label">Years coding</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Go / TS</span>
+        <div class="stat-label">Primary langs</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-label">Technical stack</div>
+    <div class="stack-grid">
+      <div class="stack-cell">
+        <div class="stack-cell-label">Backend</div>
+        <div class="tag-list">
+          <span class="tag primary">Golang</span>
+          <span class="tag primary">Gin</span>
+          <span class="tag primary">TypeScript</span>
+          <span class="tag primary">Node.js</span>
+          <span class="tag">NestJS</span>
+          <span class="tag">Express</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">System design</div>
+        <div class="tag-list">
+          <span class="tag primary">Microservices</span>
+          <span class="tag">Event-driven</span>
+          <span class="tag">REST API</span>
+          <span class="tag">Clean arch</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Data</div>
+        <div class="tag-list">
+          <span class="tag primary">MySQL/MariaDB</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">Redis</span>
+          <span class="tag">TypeORM</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Infra & tooling</div>
+        <div class="tag-list">
+          <span class="tag primary">Docker</span>
+          <span class="tag">AWS</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">VS Code</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <div class="section-label">Blog</div>
+    <div class="blog-list">
+
+      <!-- Khi có bài mới, copy template dưới đây và điền thông tin -->
+      <!--
+      <a href="YOUR_LINK" class="blog-item" target="_blank">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">system-design</span>
+            <span class="blog-date">2025-06</span>
+          </div>
+          <div class="blog-title">Tên bài viết ở đây</div>
+          <div class="blog-excerpt">Mô tả ngắn 1-2 câu về nội dung bài.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+      -->
+
+      <!-- cho bài coming soon
+      <div class="blog-item blog-coming">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">system-design</span>
+            <span class="blog-date">coming soon</span>
+          </div>
+          <div class="blog-title">Designing for scale — lessons from real production systems</div>
+          <div class="blog-excerpt">Patterns and mistakes I've seen when building systems that need to grow.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </div>
+      -->
+
+      <a href="https://codeneverdie.medium.com/cors-b%E1%BA%A3n-ch%E1%BA%A5t-h%E1%BA%A1n-ch%E1%BA%BF-v%C3%A0-best-practices-20387b48dcec" class="blog-item" target="_blank">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">backend</span>
+          </div>
+          <div class="blog-title">CORS: Bản Chất, Hạn Chế và Best Practices</div>
+          <div class="blog-excerpt">Cross-Origin Resource Sharing (CORS) là một cơ chế bảo mật quan trọng trong phát triển web application hiện đại, cho phép kiểm soát việc truy cập tài nguyên giữa các domain khác nhau.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+      
+      <a href="https://codeneverdie.medium.com/%C3%A1p-d%E1%BB%A5ng-connection-multiplexing-trong-proxysql-%C4%91%E1%BB%83-t%E1%BB%91i-%C6%B0u-k%E1%BA%BFt-n%E1%BB%91i-database-bb1f520ea1e3" class="blog-item" target="_blank">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">database</span>
+          </div>
+          <div class="blog-title">Áp dụng Connection Multiplexing trong ProxySQL để tối ưu kết nối Database</div>
+          <div class="blog-excerpt">Connection Multiplexing là một trong những tính năng nổi bật nhất của ProxySQL, giúp giải quyết vấn đề bottleneck về kết nối với hệ thống Database.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+
+      <a href="https://codeneverdie.medium.com/connection-pool-t%E1%BB%91i-%C6%B0u-k%E1%BA%BFt-n%E1%BB%91i-database-trong-h%E1%BB%87-th%E1%BB%91ng-backend-79692df429e4" class="blog-item" target="_blank">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">database</span>
+          </div>
+          <div class="blog-title">Connection Pool: Tối ưu kết nối Database trong hệ thống Backend</div>
+          <div class="blog-excerpt">Connection Pool là một cơ chế quản lý kết nối giữa các ứng dụng đến cơ sở dữ liệu (Database Server), trong đó một tập hợp các kết nối được khởi tạo trước và duy trì sẵn sàng để sử dụng.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+
+      <a href="https://codeneverdie.medium.com/transaction-trong-store-procedure-v%E1%BA%A5n-%C4%91%E1%BB%81-g%C3%AC-s%E1%BA%BD-x%E1%BA%A3y-ra-khi-qu%C3%AAn-rollback-5ab8165b55c6" class="blog-item" target="_blank">
+        <div>
+          <div class="blog-meta">
+            <span class="blog-tag">database</span>
+          </div>
+          <div class="blog-title">Transaction trong Store Procedure: Vấn đề gì sẽ xảy ra khi quên ROLLBACK?</div>
+          <div class="blog-excerpt">Trong quá trình phát triển phần mềm, chúng ta thường tin rằng Store Procedure là công cụ mạnh mẽ để tối ưu hiệu suất hệ thống. Tuy nhiên, qua trải nghiệm thực tế, mình nhận ra rằng nếu không sử dụng đúng cách, chúng có thể gây ra những vấn đề nghiêm trọng về hiệu năng.</div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="connect">
+    <div class="section-label">Connect</div>
+    <p style="font-size:14px; color:var(--muted); margin-bottom:1.5rem; max-width:480px;">
+      Open to interesting conversations about backend engineering, system design,
+      or potential collaborations.
+    </p>
+    <div class="connect-grid">
+      <a href="https://linkedin.com/in/cndvn" class="connect-link" target="_blank">
+        <span class="connect-icon">in</span> linkedin.com/in/cndvn
+      </a>
+      <a href="https://github.com/CNDvn" class="connect-link" target="_blank">
+        <span class="connect-icon">gh</span> github.com/CNDvn
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  banh duc hieu &nbsp;·&nbsp; code never die &nbsp;·&nbsp; built with html + css
+</footer>
+
+</body>
+</html>
